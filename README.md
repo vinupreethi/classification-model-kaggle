@@ -84,12 +84,12 @@ The following metrics were calculated for each model:
 
 | ML Model Name | Accuracy | AUC | Precision | Recall | F1 | MCC |
 |---|---|---|---|---|---|---|
-| Logistic Regression | [value] | [value] | [value] | [value] | [value] | [value] |
-| Decision Tree | [value] | [value] | [value] | [value] | [value] | [value] |
-| K-Nearest Neighbor | [value] | [value] | [value] | [value] | [value] | [value] |
-| Naive Bayes | [value] | [value] | [value] | [value] | [value] | [value] |
-| Random Forest (Ensemble) | [value] | [value] | [value] | [value] | [value] | [value] |
-| XGBoost (Ensemble) | [value] | [value] | [value] | [value] | [value] | [value] |
+| Logistic Regression | 0.8254 | 0.8527 | 0.7039 | 0.4501 | 0.5491 | 0.4644 |
+| Decision Tree | 0.8097 | 0.7413 | 0.5945 | 0.6115 | 0.6029 | 0.4779 |
+| K-Nearest Neighbor | 0.8289 | 0.8505 | 0.6566 | 0.5777 | 0.6147 | 0.5070 |
+| Naive Bayes | 0.8051 | 0.8554 | 0.6781 | 0.3331 | 0.4467 | 0.3769 |
+| Random Forest (Ensemble) | 0.8552 | 0.9046 | 0.7358 | 0.6040 | 0.6634 | 0.5769 |
+| XGBoost (Ensemble) | 0.8701 | 0.9239 | 0.7867 | 0.6175 | 0.6919 | 0.6183 |
 
 **Metric Definitions:**
 - **Accuracy:** Proportion of correct predictions among total predictions
