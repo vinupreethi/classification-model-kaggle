@@ -99,7 +99,10 @@ if uploaded_file is not None:
         try:
             # Preprocess the uploaded data
             test_data_processed = test_data.copy()
-            test_data_processed = test_data_processed.applymap(lambda x: x.strip() if isinstance(x, str) else x)
+            # Strip whitespace from all string columns
+            for col in test_data_processed.columns:
+                if test_data_processed[col].dtype == 'object':
+                    test_data_processed[col] = test_data_processed[col].str.strip()
             
             # Convert numeric columns
             numeric_cols = ['Age', 'fnlwgt', 'Education_Num', 'Capital_Gain', 'Capital_Loss', 'Hours_per_week']
@@ -110,8 +113,12 @@ if uploaded_file is not None:
             
             # Remove target column if exists
             if 'Target' in test_data_processed.columns:
-                y_actual = test_data_processed['Target'].map({' <=50K': 0, ' <=50K.': 0, ' >50K': 1, ' >50K.': 1})
-                test_data_processed = test_data_processed.drop('Target', axis=1)
+                # Handle all variations of target format (with/without period, with/without space)
+                y_actual = test_data_processed['Target'].str.strip().str.rstrip('.').map({'<=50K': 0, '>50K': 1})
+                # Remove rows with NaN target values
+                valid_idx = ~y_actual.isna()
+                y_actual = y_actual[valid_idx]
+                test_data_processed = test_data_processed[valid_idx].drop('Target', axis=1)
             else:
                 y_actual = None
             
@@ -140,9 +147,9 @@ if uploaded_file is not None:
             st.dataframe(results_table, use_container_width=True)
             
             # Show confusion matrix if actual labels are available
-            if y_actual is not None:
+            if y_actual is not None and len(y_actual) > 0:
                 st.subheader("Confusion Matrix")
-                cm = confusion_matrix(y_actual, predictions)
+                cm = confusion_matrix(y_actual, predictions[:len(y_actual)])
                 
                 fig, ax = plt.subplots(figsize=(6, 5))
                 sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', ax=ax,
@@ -153,7 +160,7 @@ if uploaded_file is not None:
                 
                 # Classification Report
                 st.subheader("Classification Report")
-                report = classification_report(y_actual, predictions, 
+                report = classification_report(y_actual, predictions[:len(y_actual)], 
                                              target_names=['<=50K', '>50K'])
                 st.text(report)
         
